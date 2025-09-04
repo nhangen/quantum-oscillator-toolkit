@@ -62,10 +62,14 @@ class TestHarmonicOscillator:
         assert np.isclose(a[2, 3], np.sqrt(3))
         
         # Check commutation relation: [a, a†] = I
+        # Note: In finite basis, this only holds exactly in the valid subspace
         commutator = a @ a_dag - a_dag @ a
         expected_commutator = np.eye(n_max + 1)
         
-        assert np.allclose(commutator, expected_commutator)
+        # Check commutation for all elements except boundary (where truncation effects appear)
+        for i in range(n_max):
+            for j in range(n_max):
+                assert np.isclose(commutator[i, j], expected_commutator[i, j])
     
     def test_number_operator(self):
         """Test number operator."""
@@ -106,8 +110,8 @@ class TestHarmonicOscillator:
         # Position operator should be Hermitian
         assert np.allclose(x_op, x_op.conj().T)
         
-        # Momentum operator should be anti-Hermitian * i
-        assert np.allclose(p_op, -p_op.conj().T)
+        # Momentum operator should also be Hermitian (p† = p)
+        assert np.allclose(p_op, p_op.conj().T)
         
         # Check canonical commutation relation: [x, p] = iℏI (approximately)
         commutator = x_op @ p_op - p_op @ x_op
