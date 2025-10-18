@@ -9,7 +9,7 @@ class TestFockState:
     """Test cases for FockState class."""
     
     def test_fock_state_creation(self):
-        """Test Fock state initialization."""
+        # Test Fock state initialization
         n = 2
         n_max = 5
         fock_state = FockState(n, n_max)
@@ -24,7 +24,7 @@ class TestFockState:
         assert np.allclose(fock_state.amplitudes, expected_amplitudes)
     
     def test_fock_state_probabilities(self):
-        """Test Fock state probability calculations."""
+        # Test Fock state probability calculations
         n = 3
         n_max = 10
         fock_state = FockState(n, n_max)
@@ -39,7 +39,7 @@ class TestFockState:
         assert fock_state.expectation_number() == n
     
     def test_fock_state_errors(self):
-        """Test Fock state error handling."""
+        # Test Fock state error handling
         # Negative n
         with pytest.raises(ValueError):
             FockState(-1, 5)
@@ -53,7 +53,7 @@ class TestCoherentState:
     """Test cases for CoherentState class."""
     
     def test_coherent_state_creation(self):
-        """Test coherent state initialization."""
+        # Test coherent state initialization
         alpha = 2.0 + 1.0j
         n_max = 10
         
@@ -67,7 +67,7 @@ class TestCoherentState:
         assert np.isclose(norm_squared, 1.0)
     
     def test_coherent_state_poisson_distribution(self):
-        """Test that coherent state has Poissonian photon statistics."""
+        # Test that coherent state has Poissonian photon statistics
         alpha = 2.0  # Real alpha for simplicity
         n_max = 20
         
@@ -89,7 +89,7 @@ class TestCoherentState:
             assert np.isclose(prob, expected_prob, rtol=0.05)
     
     def test_coherent_state_displacement(self):
-        """Test coherent state classical displacements."""
+        # Test coherent state classical displacements
         alpha = 3.0 + 2.0j
         coherent_state = CoherentState(alpha, n_max=15)
         
@@ -104,7 +104,7 @@ class TestCoherentState:
         assert np.isclose(p_displacement, expected_p)
     
     def test_coherent_state_properties(self):
-        """Test various coherent state properties."""
+        # Test various coherent state properties
         alpha = 1.5
         coherent_state = CoherentState(alpha, n_max=20)
         
@@ -133,7 +133,7 @@ class TestThermalState:
     """Test cases for ThermalState class."""
     
     def test_thermal_state_zero_temperature(self):
-        """Test thermal state at T=0 (ground state)."""
+        # Test thermal state at T=0 (ground state)
         thermal_state = ThermalState(temperature=0.0, frequency=1.0, n_max=10)
         
         # At T=0, should be in ground state
@@ -144,7 +144,7 @@ class TestThermalState:
             assert thermal_state.probabilities[n] == 0.0
     
     def test_thermal_state_high_temperature(self):
-        """Test thermal state at high temperature."""
+        # Test thermal state at high temperature
         # High temperature: kT >> ℏω
         temperature = 10.0  # Much larger than ℏω = 1
         frequency = 1.0
@@ -161,7 +161,7 @@ class TestThermalState:
         assert thermal_state.n_bar > 1.0  # Should have significant excitation
     
     def test_thermal_state_density_matrix(self):
-        """Test thermal state density matrix properties."""
+        # Test thermal state density matrix properties
         thermal_state = ThermalState(temperature=1.0, frequency=1.0, n_max=10)
         rho = thermal_state.density_matrix()
         
@@ -178,7 +178,7 @@ class TestThermalState:
             assert np.isclose(rho[n, n], thermal_state.probabilities[n])
     
     def test_thermal_state_expectation_number(self):
-        """Test thermal state photon number expectation."""
+        # Test thermal state photon number expectation
         temperature = 2.0
         frequency = 1.0
         thermal_state = ThermalState(temperature, frequency, n_max=15)
@@ -192,7 +192,7 @@ class TestThermalState:
         assert np.isclose(n_bar_direct, n_bar_probabilities, rtol=0.01)
     
     def test_thermal_state_temperature_scaling(self):
-        """Test thermal state behavior vs temperature."""
+        # Test thermal state behavior vs temperature
         frequency = 1.0
         temperatures = [0.1, 0.5, 1.0, 2.0, 5.0]
         

@@ -1,5 +1,22 @@
 #!/usr/bin/env python3
-"""Basic usage examples for Quantum Oscillator Toolkit."""
+"""Basic usage examples demonstrating Quantum Oscillator Toolkit capabilities.
+
+This example script provides practical demonstrations of the key features
+available in the quantum oscillator toolkit. Each example focuses on a
+specific aspect of quantum harmonic oscillator physics:
+
+1. Coherent state time evolution and classical correspondence
+2. Fock state properties and uncertainty relations
+3. Decoherence dynamics under amplitude damping
+4. Quantum state visualization and comparison
+
+These examples serve as both educational material and practical templates
+for research applications in quantum optics, cavity QED, and quantum
+information processing.
+
+Running this script will generate several visualization plots demonstrating
+the theoretical concepts implemented in the toolkit.
+"""
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,7 +26,19 @@ from quantum_oscillator.decoherence import AmplitudeDamping, coherence_measures
 
 
 def example_coherent_state_evolution():
-    """Example: Time evolution of a coherent state."""
+    """Demonstrate time evolution of coherent states and quantum-classical correspondence.
+    
+    This example shows how coherent states evolve under the harmonic oscillator
+    Hamiltonian, exhibiting perfect circular motion in phase space. The quantum
+    expectation values exactly match the classical trajectory, demonstrating
+    the remarkable quantum-classical correspondence for coherent states.
+    
+    Key concepts illustrated:
+        - Coherent state parameter evolution: α(t) = α₀ e^(-iωt)
+        - Phase space trajectories (circular orbits)
+        - Quantum-classical correspondence
+        - Time-dependent expectation values ⟨x(t)⟩, ⟨p(t)⟩
+    """
     print("=== Coherent State Evolution ===")
     
     # Create oscillator (frequency = 1.0, natural units)
@@ -56,11 +85,22 @@ def example_coherent_state_evolution():
     plt.savefig('coherent_state_trajectory.png', dpi=150)
     plt.show()
     
-    print("Phase space trajectory plotted!")
+    print("Phase space trajectory plotted - quantum and classical overlap perfectly!")
 
 
 def example_fock_state_properties():
-    """Example: Properties of Fock states."""
+    """Explore fundamental properties of Fock states (energy eigenstates).
+    
+    Fock states |n⟩ are the energy eigenstates of the quantum harmonic
+    oscillator with well-defined excitation numbers. This example demonstrates
+    their key properties and how quantum uncertainty scales with excitation.
+    
+    Key concepts illustrated:
+        - Discrete energy spectrum: Eₙ = ℏω(n + 1/2)
+        - Position and momentum uncertainties
+        - Uncertainty product scaling: ΔxΔp = ℏ(n + 1/2)
+        - Quantum number dependence of state properties
+    """
     print("\n=== Fock State Properties ===")
     
     oscillator = HarmonicOscillator(frequency=1.0)
@@ -94,11 +134,23 @@ def example_fock_state_properties():
         uncertainty_product = x_uncertainty * p_uncertainty
         
         print(f"|{n}⟩: Δx = {x_uncertainty:.3f}, Δp = {p_uncertainty:.3f}, "
-              f"ΔxΔp = {uncertainty_product:.3f}")
+              f"ΔxΔp = {uncertainty_product:.3f} (minimum = 0.5)")
 
 
 def example_decoherence():
-    """Example: Decoherence of a coherent state."""
+    """Demonstrate quantum decoherence under amplitude damping.
+    
+    This example shows how a pure coherent state evolves into a mixed state
+    under the influence of amplitude damping (energy dissipation). The process
+    illustrates fundamental aspects of open quantum system dynamics.
+    
+    Key concepts illustrated:
+        - Lindblad master equation evolution
+        - Purity decay: Tr(ρ²) → 0
+        - Energy dissipation: ⟨n⟩ → 0
+        - Quantum-to-classical transition
+        - Coherence measures and entropy
+    """
     print("\n=== Decoherence Example ===")
     
     oscillator = HarmonicOscillator(frequency=1.0)
@@ -149,11 +201,28 @@ def example_decoherence():
     plt.savefig('decoherence_evolution.png', dpi=150)
     plt.show()
     
-    print("Decoherence evolution plotted!")
+    print("Decoherence evolution plotted - shows purity decay and energy loss!")
 
 
 def example_wigner_function():
-    """Example: Wigner function for quantum states (simplified).""" 
+    """Visualize and compare different quantum state types.
+    
+    This simplified visualization compares the Fock state probability
+    distributions for different quantum states. While not a true Wigner
+    function calculation, it provides intuitive understanding of how
+    different states populate the energy eigenbasis.
+    
+    Key concepts illustrated:
+        - Fock state probability distributions
+        - Ground state vs excited state populations
+        - Coherent state photon number statistics
+        - State characterization through measurement probabilities
+    
+    Note:
+        Full Wigner function calculation requires phase space integration
+        and is computationally intensive. This example provides a simplified
+        but instructive alternative visualization.
+    """ 
     print("\n=== Wigner Function Visualization ===")
     
     # This is a simplified visualization - full Wigner function requires more computation
@@ -189,7 +258,7 @@ def example_wigner_function():
     plt.savefig('quantum_states_comparison.png', dpi=150)
     plt.show()
     
-    print("Quantum states comparison plotted!")
+    print("Quantum states comparison plotted - note different probability distributions!")
 
 
 if __name__ == "__main__":

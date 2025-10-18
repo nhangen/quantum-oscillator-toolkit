@@ -9,7 +9,7 @@ class TestHarmonicOscillator:
     """Test cases for HarmonicOscillator class."""
     
     def test_initialization(self):
-        """Test oscillator initialization."""
+        # Test oscillator initialization
         oscillator = HarmonicOscillator(frequency=2.0, mass=1.5, hbar=1.0)
         
         assert oscillator.frequency == 2.0
@@ -24,7 +24,7 @@ class TestHarmonicOscillator:
         assert oscillator.energy_scale == expected_energy_scale
     
     def test_energy_eigenvalues(self):
-        """Test energy eigenvalue calculation."""
+        # Test energy eigenvalue calculation
         oscillator = HarmonicOscillator(frequency=1.0, hbar=1.0)
         
         # Test first few energy levels: E_n = ℏω(n + 1/2)
@@ -38,7 +38,7 @@ class TestHarmonicOscillator:
             oscillator.energy_eigenvalue(-1)
     
     def test_creation_annihilation_operators(self):
-        """Test creation and annihilation operator matrices."""
+        # Test creation and annihilation operator matrices
         oscillator = HarmonicOscillator()
         n_max = 3
         
@@ -72,7 +72,7 @@ class TestHarmonicOscillator:
                 assert np.isclose(commutator[i, j], expected_commutator[i, j])
     
     def test_number_operator(self):
-        """Test number operator."""
+        # Test number operator
         oscillator = HarmonicOscillator()
         n_max = 5
         
@@ -83,7 +83,7 @@ class TestHarmonicOscillator:
         assert np.allclose(n_op, expected)
     
     def test_hamiltonian(self):
-        """Test Hamiltonian matrix."""
+        # Test Hamiltonian matrix
         oscillator = HarmonicOscillator(frequency=2.0, hbar=1.0)
         n_max = 3
         
@@ -96,7 +96,7 @@ class TestHarmonicOscillator:
         assert np.allclose(eigenvalues, expected_eigenvalues)
     
     def test_position_momentum_operators(self):
-        """Test position and momentum operators."""
+        # Test position and momentum operators
         oscillator = HarmonicOscillator(frequency=1.0, mass=1.0, hbar=1.0)
         n_max = 2
         
@@ -123,7 +123,7 @@ class TestHarmonicOscillator:
         assert np.isclose(commutator[1, 1], expected[1, 1])
     
     def test_operator_relations(self):
-        """Test relationships between operators."""
+        # Test relationships between operators
         oscillator = HarmonicOscillator(frequency=1.0, mass=1.0, hbar=1.0)
         n_max = 5
         
@@ -140,7 +140,7 @@ class TestHarmonicOscillator:
                 assert np.isclose(n_from_operators[i, j], n_op[i, j])
     
     def test_custom_units(self):
-        """Test oscillator with custom units."""
+        # Test oscillator with custom units
         # Test with different frequency and mass
         freq = 3.0
         mass = 2.0

@@ -1,6 +1,25 @@
 """Decoherence models for quantum harmonic oscillator.
 
 Implementation based on proven DeCoN PINN Lindblad master equation solvers.
+This module implements various decoherence mechanisms that arise when quantum
+systems interact with environmental degrees of freedom. The theoretical framework
+is based on the Lindblad master equation formalism, which provides the most
+general description of Markovian open quantum system dynamics.
+
+The implementation includes:
+    - Amplitude damping (energy dissipation)
+    - Phase damping (pure dephasing)
+    - Thermal reservoir coupling
+    - Composite decoherence models
+
+These models are essential for understanding quantum-to-classical transitions,
+quantum error rates in realistic systems, and the design of quantum error
+correction protocols.
+
+References:
+    Theory of Open Quantum Systems, H.-P. Breuer & F. Petruccione
+    Quantum Noise, C.W. Gardiner & P. Zoller
+    The Theory of Quantum Information, J. Watrous
 """
 
 import numpy as np
@@ -27,6 +46,16 @@ class DecoherenceModel:
         
         Implementation based on decon-lite/physics/lindblad.py which has been
         extensively validated against quantum hardware and analytical solutions.
+        
+        The Lindblad master equation provides the most general form of Markovian
+        evolution for open quantum systems. It preserves the essential properties
+        of quantum density matrices (trace preservation, complete positivity)
+        while allowing for irreversible dynamics due to environmental coupling.
+        
+        The equation has the form:
+            dρ/dt = -i[H,ρ]/ℏ + Σ_k γ_k D[L_k][ρ]
+        
+        where D[L][ρ] = LρL† - ½{L†L, ρ} is the dissipator superoperator.
         
         Args:
             rho: Density matrix
@@ -76,6 +105,18 @@ class AmplitudeDamping(DecoherenceModel):
         
         Uses the validated Lindblad superoperator approach with proper
         4th-order Runge-Kutta integration for numerical stability.
+        
+        Amplitude damping represents energy dissipation from the quantum system
+        to a zero-temperature environment. The Lindblad operator is L = √γ â,
+        where â is the annihilation operator and γ is the damping rate.
+        
+        This process models realistic scenarios such as:
+            - Spontaneous emission in atomic systems
+            - Photon loss in optical cavities
+            - Phonon emission in solid-state systems
+        
+        The evolution uses 4th-order Runge-Kutta integration for numerical
+        accuracy, with automatic trace normalization and Hermiticity enforcement.
         
         Args:
             rho: Initial density matrix
@@ -151,10 +192,22 @@ class PhaseDamping(DecoherenceModel):
         
         current_rho = rho.copy()
         
+        # Use 4th-order Runge-Kutta for phase damping as well
         for _ in range(n_steps):
-            current_rho = self.lindblad_operator(
-                current_rho, [n_op], [self.dephasing_rate], H, dt
-            )
+            k1 = self.lindblad_superoperator(current_rho, H, [n_op], [self.dephasing_rate])
+            k2 = self.lindblad_superoperator(current_rho + 0.5*dt*k1, H, [n_op], [self.dephasing_rate])
+            k3 = self.lindblad_superoperator(current_rho + 0.5*dt*k2, H, [n_op], [self.dephasing_rate])
+            k4 = self.lindblad_superoperator(current_rho + dt*k3, H, [n_op], [self.dephasing_rate])
+            
+            current_rho = current_rho + (dt/6) * (k1 + 2*k2 + 2*k3 + k4)
+            
+            # Ensure proper quantum state properties (from DeCoN validation)
+            current_rho = 0.5 * (current_rho + current_rho.conj().T)  # Hermitian
+            
+            # Normalize trace
+            trace = np.real(np.trace(current_rho))
+            if trace > 1e-12:
+                current_rho = current_rho / trace
         
         return current_rho
 

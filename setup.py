@@ -6,7 +6,7 @@ setup(
     description="Python toolkit for quantum harmonic oscillator simulation",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    author="DeCoN Team",
+    author="@nhangen",
     package_dir={"": "src"},
     packages=find_packages(where="src"),
     python_requires=">=3.8",
